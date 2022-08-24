@@ -1,6 +1,5 @@
 from django.db import models
-from django.core.exceptions import ValidationError
-# from API_client import APIClient
+from autoslug import AutoSlugField
 from django.core.validators import (MaxValueValidator,
                                     MinValueValidator,
                                     MinLengthValidator)
@@ -20,6 +19,7 @@ class SeriesModel(models.Model):
             MinValueValidator(1)
         ], blank=False, null=False)
     show = models.BooleanField(default=True)
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self) -> str:
         return f"{self.user.username} - {self.title}"

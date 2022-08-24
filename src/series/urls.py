@@ -5,4 +5,6 @@ from series import views
 urlpatterns = [
     path('', views.homepage_view, name='homepage'),
     path('series/add', views.AddSeriesView.as_view(), name='add-series'),
+    path('series/update/<slug:slug>', views.UpdateSeriesView.as_view(), name='update-series'),
+    path('series/delete/<slug:slug>', views.SeriesDeleteView.as_view(), name='delete-series'),
 ]

@@ -1,20 +1,23 @@
-from django.views.generic import CreateView
 from series.models import SeriesModel
-from django.urls import reverse_lazy, reverse
+from django.views.generic import UpdateView
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import (get_object_or_404,
+                            redirect)
 from requests import get
 
 
-class AddSeriesView(LoginRequiredMixin, CreateView):
+class UpdateSeriesView(LoginRequiredMixin, UpdateView):
     login_url = reverse_lazy('login')
-    template_name = 'add_series.html'
-    model = SeriesModel
+    template_name = 'update_series.html'
     fields = ('title', 'imdb_id', 'last_season', 'last_episode', 'show')
 
+    def get_object(self):
+        return get_object_or_404(SeriesModel, slug=self.kwargs.get('slug'), user=self.request.user)
+
     def get_success_url(self):
-        messages.success(self.request, 'Series Added')
+        messages.success(self.request, 'Series Updated')
         return reverse('homepage')
 
     def form_valid(self, form):
@@ -24,7 +27,7 @@ class AddSeriesView(LoginRequiredMixin, CreateView):
         raw_data = get(f"https://imdb-api.com/en/API/Title/{series.user.imdb_api_key}/{series.imdb_id}")
 
         if raw_data.status_code != 200:
-            messages.info(self.request, 'TV Series can not added. Please try again.')
+            messages.info(self.request, 'TV Series can not updated. Please try again.')
             return redirect('add-series')
         data = raw_data.json()
 
@@ -50,3 +53,4 @@ class AddSeriesView(LoginRequiredMixin, CreateView):
         series.save()
         form.save_m2m()
         return super().form_valid(form)
+

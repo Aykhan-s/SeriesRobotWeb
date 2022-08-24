@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %} Deletion Confirmation {% endblock title %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <p>Are you sure you want to delete?</p>
+    <style>
+        .btn:hover {
+            background: #fff;
+            color: #0069D9;
+        }
+    </style>
+    <input type="submit" values="Yes" class="btn btn-primary mt-3">
+</form>
+
+{% endblock content %}

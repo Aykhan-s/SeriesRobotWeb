@@ -9,7 +9,6 @@
 
 <form method="POST">
     {% csrf_token %}
-    {{form.media}}
     {{form|crispy}}
     <a href="https://imdb-api.com/Identity/Account/Register">Get API Key</a><br>
     <style>

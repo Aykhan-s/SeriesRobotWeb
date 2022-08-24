@@ -2,19 +2,13 @@
 {% load crispy_forms_tags %}
 
 
-{% block title %} Profil Güncəllə {% endblock title %}
+{% block title %} Update Series {% endblock title %}
 
 {% block content %}
 
 <form enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     {{form|crispy}}
-    <style>
-        .btn:hover {
-            background: #fff;
-            color: #0069D9;
-        }
-    </style>
     <input type="submit" value="Save" class="btn btn-primary mt-3 mb-5">
 </form>
 
