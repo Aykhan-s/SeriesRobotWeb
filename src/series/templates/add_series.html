@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Add Series {% endblock title %}
+
+{% block content %}
+{% include 'components/message.html' %}
+
+<form enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    {{form|crispy}}
+    <style>
+        .btn:hover {
+            background: #fff;
+            color: #218838;
+        }
+    </style>
+    <input type="submit" value="Add" class="btn btn-primary mt-3 mb-5">
+</form>
+
+{% endblock content %}
+    

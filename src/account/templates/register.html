@@ -5,6 +5,7 @@
 {% block title %} Signup {% endblock title %}
 
 {% block content %}
+{% include 'components/message.html' %}
 
 <form method="POST">
     {% csrf_token %}
