@@ -31,6 +31,10 @@ class UpdateSeriesView(LoginRequiredMixin, UpdateView):
             return redirect('add-series')
         data = raw_data.json()
 
+        if 'Maximum usage' in data['errorMessage']:
+            messages.info(self.request, f"IMDB Key: {data['errorMessage']}")
+            return redirect('add-series')
+
         if data['errorMessage']:
             form.add_error('imdb_id', 'ID is not correct.')
             return self.form_invalid(form)
@@ -44,8 +48,13 @@ class UpdateSeriesView(LoginRequiredMixin, UpdateView):
             form.add_error('last_season', 'The season number is not correct.')
             return self.form_invalid(form)
 
-        data = get(f"https://imdb-api.com/en/API/SeasonEpisodes/{series.user.imdb_api_key}/{series.imdb_id}/{series.last_season}").json()
-        episodes_count = len(data['episodes'])
+        raw_data = get(f"https://imdb-api.com/en/API/SeasonEpisodes/{series.user.imdb_api_key}/{series.imdb_id}/{series.last_season}")
+        if raw_data.status_code != 200:
+            messages.info(self.request, 'TV Series can not added. Please try again.')
+            return redirect('add-series')
+        episodes = raw_data.json()['episodes']
+
+        episodes_count = len(episodes)
         if series.last_episode > episodes_count:
             form.add_error('last_episode', 'The episode number is not correct.')
             return self.form_invalid(form)

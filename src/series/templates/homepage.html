@@ -1,9 +1,72 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} Home Page {% endblock title %}
 
 {% block content %}
 
 {% include 'components/message.html' %}
+
+<table class="table" style="margin-bottom: 1.5rem;">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Season, Episode</th>
+            <th scope="col">Show</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in series %}
+            <tr>
+                <th scope="row">
+                    <a href="https://www.imdb.com/title/{{s.imdb_id}}/" style="text-decoration: none;" target="_blank">
+                        {{s.title}}
+                    </a>
+                    <br>
+                    <a class="btn mr-1 update-btn" style="padding: 0;" href="{% url 'update-series' s.slug %}">
+                        <img src="{% static 'icons/edit.png' %}" width="21px" height="21px">
+                        <!-- <i class="fa fa-edit fa-lg" style="font-size: 19px;"></i> -->
+                    </a>
+                    <a class="btn delete-btn" href="{% url 'delete-series' s.slug %}">
+                        <img src="{% static 'icons/trash.png' %}" width="24px" height="24px">
+                        <!-- <i class="fa fa-trash fa-lg" style="font-size: 19px;"></i> -->
+                    </a>
+                </th>
+                <td>{{s.last_season}} - {{s.last_episode}}</td>
+                <td>
+                    {% if s.show %}
+                        <img src="{% static 'icons/true-check-button.png' %}" width="22px" height="22px">
+                    {% else %}
+                        <img src="{% static 'icons/false-check-button.png' %}" width="22px" height="22px">
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        {% if series.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">First Page</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{series.previous_page_number}}"><</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item"><a class="page-link" href="#">{{series.number}}</a></li>
+
+        {% if series.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{series.next_page_number}}">></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{series.paginator.num_pages}}">Last Page</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 
 {% endblock content %}
