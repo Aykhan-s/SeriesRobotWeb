@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Profile {% endblock title %}
+    
+
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>Username: <small>{{profile.username}}</small></h5>
+        <h5>Email: <small>{{profile.email|default:""}}</small></h5>
+        <h5>IMDB API Key: <small>{{profile.imdb_api_key}}</small></h5> 
+    </div>
+</div>
+
+<a href="/account/profile-editing" style="color: inherit; text-decoration: none;">
+    <button type="button" class="btn btn-primary">Edit Profile</button>
+</a>
+<a href="/account/change-password" style="color: inherit; text-decoration: none;">
+    <button type="button" class="btn btn-primary">Change Password</button>
+</a>
+
+{% endblock content %}

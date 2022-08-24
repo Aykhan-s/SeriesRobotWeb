@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %} Signup {% endblock title %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{form.media}}
+    {{form|crispy}}
+    <a href="https://imdb-api.com/Identity/Account/Register">Get API Key</a><br>
+    <style>
+        .btn:hover {
+            background: #fff;
+            color: #0069D9;
+        }
+    </style>
+    <input type="submit" value="Signup" class="btn btn-primary mt-3 mb-3">
+    <p class="mb-5">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+</form>
+
+{% endblock content %}
+    

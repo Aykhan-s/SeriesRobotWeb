@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+{% include 'components/message.html' %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{form|crispy}}
+    <style>
+        .btn:hover {
+            background: #fff;
+            color: #0069D9;
+        }
+    </style>
+    <input type="submit" value="Login" class="btn btn-primary mt-3 mb-3">
+    <p class="mb-5">No account? <a href="{% url 'register' %}">Signup</a></p>
+</form>
+
+{% endblock content %}
+    

@@ -1,0 +1,35 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 65px;
+    background: black;
+    text-align: center;
+}
+
+.div-left {
+    margin-top: 1.5rem;
+    margin-left: 1.3rem;
+}
+
+.div-right {
+    margin-top: 1rem;
+    margin-right: 1.5rem;
+}
+
+footer div span a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.contact-links{
+    border: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.contact-icons{
+    font-size: 23px;
+}
