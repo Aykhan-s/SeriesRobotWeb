@@ -16,15 +16,14 @@ def register_view(request):
                 return redirect('register')
             data = raw_data.json()
 
-            if 'Maximum usage' in data['errorMessage']:
-                messages.info(request, f"IMDB API: {data['errorMessage']}")
-                return redirect('register')
-
-            if data['errorMessage'] == 'Invalid API Key':
-                form.add_error('imdb_api_key', 'Invalid API Key')
-                return render(request, 'register.html', context={"form": form})
-
             if data['errorMessage']:
+                if 'Maximum usage' in data['errorMessage']:
+                    messages.info(request, f"IMDB API: {data['errorMessage']}")
+                    return redirect('register')
+
+                elif data['errorMessage'] == 'Invalid API Key':
+                    form.add_error('imdb_api_key', 'Invalid API Key')
+                    return render(request, 'register.html', context={"form": form})
                 messages.info(request, f"IMDB API: {data['errorMessage']}")
                 return redirect('register')
 

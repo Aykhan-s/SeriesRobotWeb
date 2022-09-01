@@ -10,8 +10,8 @@
 <table class="table" style="margin-bottom: 1.5rem;">
     <thead>
         <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Season, Episode</th>
+            <th scope="col">Title ({{series.paginator.count}})</th>
+            <th scope="col">Season - Episode</th>
             <th scope="col">Show</th>
         </tr>
     </thead>
@@ -25,11 +25,9 @@
                     <br>
                     <a class="btn mr-1 update-btn" style="padding: 0;" href="{% url 'update-series' s.slug %}">
                         <img src="{% static 'icons/edit.png' %}" width="21px" height="21px">
-                        <!-- <i class="fa fa-edit fa-lg" style="font-size: 19px;"></i> -->
                     </a>
                     <a class="btn delete-btn" href="{% url 'delete-series' s.slug %}">
                         <img src="{% static 'icons/trash.png' %}" width="24px" height="24px">
-                        <!-- <i class="fa fa-trash fa-lg" style="font-size: 19px;"></i> -->
                     </a>
                 </th>
                 <td>{{s.last_season}} - {{s.last_episode}}</td>
@@ -45,28 +43,38 @@
     </tbody>
 </table>
 
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-end">
-        {% if series.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1">First Page</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{series.previous_page_number}}"><</a>
-            </li>
-        {% endif %}
+<div style="float: left;">
+    <button type="button" class="btn btn-outline-primary">
+        <a href="/series/new-episodes/" style="text-decoration: none; color: inherit;">New Episodes</a>
+    </button>
+</div>
 
-        <li class="page-item"><a class="page-link" href="#">{{series.number}}</a></li>
+<div style="float: right;">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            {% if series.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1"><<</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{series.previous_page_number}}"><</a>
+                </li>
+            {% endif %}
 
-        {% if series.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{series.next_page_number}}">></a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{series.paginator.num_pages}}">Last Page</a>
-            </li>
-        {% endif %}
-    </ul>
-</nav>
+            {% if series.paginator.count > 5 %}
+                <li class="page-item"><a class="page-link" href="#">{{series.number}}</a></li>
+            {% endif %}
+
+            {% if series.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{series.next_page_number}}">></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{series.paginator.num_pages}}">>></a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 
 {% endblock content %}
