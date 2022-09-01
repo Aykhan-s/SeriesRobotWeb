@@ -5,6 +5,7 @@
 {% block title %} Edit Profile {% endblock title %}
 
 {% block content %}
+{% include 'components/message.html' %}
 
 <form enctype="multipart/form-data" method="POST">
     {% csrf_token %}
