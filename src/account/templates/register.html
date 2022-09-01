@@ -7,7 +7,7 @@
 {% block content %}
 {% include 'components/message.html' %}
 
-<form method="POST">
+<form method="POST" style="margin-bottom: 5.5rem;">
     {% csrf_token %}
     {{form|crispy}}
     <a href="https://imdb-api.com/Identity/Account/Register">Get API Key</a><br>
