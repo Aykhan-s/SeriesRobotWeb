@@ -30,7 +30,6 @@ def episode_counter(request, s, data):
 
         episodes = data['episodes']
         for i in range(int(s.last_episode) if n == str(s.last_season) else 0, len(episodes)):
-            print(i, '------------------------------')
             released_date = episodes[i]['released'].replace('.', '')
             try:
                 episode_date = datetime.strptime(released_date, '%d %b %Y')
