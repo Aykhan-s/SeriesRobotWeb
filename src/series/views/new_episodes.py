@@ -5,7 +5,6 @@ from django.contrib import messages
 from account.models import User
 from requests import get
 from datetime import datetime
-from django.core.paginator import Paginator
 
 
 def get_request(request, link):
@@ -31,17 +30,18 @@ def episode_counter(request, s, data):
 
         episodes = data['episodes']
         for i in range(int(s.last_episode) if n == str(s.last_season) else 0, len(episodes)):
+            print(i, '------------------------------')
             released_date = episodes[i]['released'].replace('.', '')
             try:
                 episode_date = datetime.strptime(released_date, '%d %b %Y')
                 if (episode_date - now_date).days > 0:
                     raise ValueError
-            except ValueError: return new_episodes_count, last_n, last_i+1
+            except ValueError: return new_episodes_count, last_n, last_i+1 if new_episodes_count > 0 else 0, 0, 0
             last_i = i
             new_episodes_count += 1
         last_n = n
 
-    return new_episodes_count, n, i+1
+    return new_episodes_count, n, i+1 if new_episodes_count > 0 else 0, 0, 0
 
 @login_required(login_url='/account/login')
 def new_episodes_view(request):
@@ -61,8 +61,6 @@ def new_episodes_view(request):
                 ])
 
     if series_new_episodes:
-        page = request.GET.get('page')
-        paginator = Paginator(series_new_episodes, 1)
-        return render(request, 'new_episodes.html', context={'data': paginator.get_page(page)})
+        return render(request, 'new_episodes.html', context={'data': series_new_episodes})
     messages.warning(request, "There are no new episodes of any series :(")
     return redirect('homepage')
