@@ -52,7 +52,7 @@ def new_episodes_view(request):
         data = get_request(request, f"https://imdb-api.com/en/API/Title/{request.user.imdb_api_key}/{s.imdb_id}")
         if type(data) is not dict: return data
         data = episode_counter(request, s, data)
-        if type(data) is not list: return data
+        if type(data) is not tuple: return data
         if data[0]:
             series_new_episodes.append([s,
                 {'count': data[0],
