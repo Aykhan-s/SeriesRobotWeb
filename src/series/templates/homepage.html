@@ -30,7 +30,11 @@
                         <img src="{% static 'icons/trash.png' %}" width="24px" height="24px">
                     </a>
                 </th>
-                <td>{{s.last_season}} - {{s.last_episode}}</td>
+                <td>
+                    <a href="https://www.imdb.com/title/{{s.imdb_id}}/episodes?season={{s.last_season}}" style="text-decoration: none;" target="_blank">
+                        {{s.last_season}} - {{s.last_episode}}
+                    </a>
+                </td>
                 <td>
                     {% if s.show %}
                         <img src="{% static 'icons/true-check-button.png' %}" width="22px" height="22px">
