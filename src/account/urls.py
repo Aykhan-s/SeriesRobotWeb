@@ -8,8 +8,9 @@ urlpatterns = [
         template_name = 'login.html'
         ), name='login'),
     path('register', views.register_view, name='register'),
+    path('activate/<uidb64>/<token>/', views.activate_view, name='activate'),
     path('logout', views.logout_view, name='logout'),
     path('change-password', views.change_password_view, name='change-password'),
     path('profile-editing', views.profile_editing_view, name='profile-editing'),
-    path('profile', views.ProfileDetailView.as_view(), name='profile')
+    path('profile', views.ProfileDetailView.as_view(), name='profile'),
 ]

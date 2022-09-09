@@ -5,9 +5,21 @@ from .models import User
 
 @admin.register(User)
 class CustomAdmin(UserAdmin):
-    list_display = ('username', 'email')
-    fieldsets = UserAdmin.fieldsets + (
-        ('IMDB API Key Field', {
-            'fields': ['imdb_api_key']
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'password')}),
+        (('Permissions'), {
+            'fields': ('is_active', 'email_notification_is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+        }),
+        (('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2'),
         }),
     )
+    list_display = ('username', 'email', 'is_staff')
+    list_filter = ('is_staff', 'email_notification_is_active', 'is_superuser', 'is_active', 'groups')
+    search_fields = ('email',)
+    ordering = ('email',)
+    filter_horizontal = ('groups', 'user_permissions',)

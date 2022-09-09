@@ -5,7 +5,7 @@ https://ayxan.pythonanywhere.com
 **pip install -r requirements.txt<br />
 cd src/<br />**
 
-add SECRET_KEY to .env.example file<br />
+add SECRET_KEY, EMAIL_HOST_PASSWORD to .env.example file<br />
 rename .env.example to .env<br />
 
 **python3 manage.py makemigrations account --settings=config.settings.development<br />
