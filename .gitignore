@@ -4,3 +4,4 @@ migrations
 db.sqlite3
 src/config/settings/static
 .env
+Backup-codes-series.notification.txt

@@ -83,7 +83,9 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
+# PASSWORD_RESET_TIMEOUT = 60  # second
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MAILER_EMAIL_BACKEND = EMAIL_BACKEND
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
