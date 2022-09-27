@@ -83,7 +83,7 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# PASSWORD_RESET_TIMEOUT = 60  # second
+PASSWORD_RESET_TIMEOUT = 120  # second
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MAILER_EMAIL_BACKEND = EMAIL_BACKEND
