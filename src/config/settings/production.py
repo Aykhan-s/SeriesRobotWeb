@@ -16,7 +16,10 @@ DATABASES = {
     }
 }
 
-STATIC_URL = '/static/'
+STATIC_URL = '/django_static/'
+STATIC_ROOT = [
+    BASE_DIR / 'django_static'
+]
 STATICFILES_DIRS = [
-    BASE_DIR / 'static'
+    BASE_DIR / 'django_static/static'
 ]
