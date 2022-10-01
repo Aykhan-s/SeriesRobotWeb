@@ -6,3 +6,4 @@ src/config/settings/static
 .env
 Backup-codes-series.notification.txt
 celerybeat-schedule
+databasepostgresql_env

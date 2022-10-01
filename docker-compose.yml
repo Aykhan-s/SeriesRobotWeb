@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    env_file:
+      - config/db/databasepostgresql_env
+
+  django:
+    build: .
+    command: python3 src/manage.py runserver 0.0.0.0:8000 --settings=config.settings.production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  dbdata:
