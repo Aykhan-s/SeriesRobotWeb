@@ -17,9 +17,7 @@ DATABASES = {
 }
 
 STATIC_URL = '/django_static/'
-STATIC_ROOT = [
-    BASE_DIR / 'django_static'
-]
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'django_static')
 STATICFILES_DIRS = [
-    BASE_DIR / 'django_static/static'
+    BASE_DIR / 'static'
 ]
