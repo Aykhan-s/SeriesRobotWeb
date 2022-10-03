@@ -12,11 +12,12 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.production
     build: .
-    command: python3 src/manage.py runserver 0.0.0.0:8000 --settings=config.settings.production
+    command: gunicorn --chdir src --bind 0.0.0.0:8000 config.wsgi
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - rabbitmq
     volumes:
       - static_volume:/django_static
 
