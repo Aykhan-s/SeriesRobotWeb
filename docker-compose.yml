@@ -17,7 +17,6 @@ services:
       - "8000:8000"
     depends_on:
       - db
-      - rabbitmq
     volumes:
       - static_volume:/django_static
 
