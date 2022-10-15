@@ -9,3 +9,4 @@ celerybeat-schedule
 databasepostgresql_env
 ssh-private.key
 ssh-public.key
+certbot

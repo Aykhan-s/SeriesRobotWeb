@@ -1,5 +1,5 @@
 ## Demo Project Link
-https://ayxan.pythonanywhere.com
+https://series-notification.online
 
 ## Installition for Dev
 **pip install -r requirements.txt<br />
