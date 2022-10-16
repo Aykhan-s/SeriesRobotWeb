@@ -1,0 +1,15 @@
+@media only screen and (max-width: 510px) {
+    table {
+        font-size: 90%;
+    }
+
+    .edit-icon {
+        width: 19px;
+        height: 19px;
+    }
+
+    .trash-icon {
+        width: 21px;
+        height: 21px;
+    }
+}

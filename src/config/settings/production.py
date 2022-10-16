@@ -23,3 +23,5 @@ STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'django_s
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+CELERY_BROKER_URL = "amqp://guest:guest@rabbitmq:5672/"

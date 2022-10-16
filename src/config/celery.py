@@ -1,5 +1,6 @@
 import os
 from celery import Celery
+from celery.schedules import crontab
 
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
@@ -10,6 +11,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'send-emails': {
         'task': 'send_emails',
-        'schedule': 86400,
+        'schedule': crontab(hour=23, minute=58),
     },
-}  
+}
