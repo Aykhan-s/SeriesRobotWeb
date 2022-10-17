@@ -1,15 +1,27 @@
+.table {
+    margin-bottom: 1.5rem;
+}
+
+.btn-new-episode {
+    float: left;
+}
+
+.pages {
+    float: right;
+}
+
 @media only screen and (max-width: 510px) {
     table {
-        font-size: 90%;
+        font-size: 87%;
     }
 
     .edit-icon {
-        width: 19px;
-        height: 19px;
+        width: 18px;
+        height: 18px;
     }
 
     .trash-icon {
-        width: 21px;
-        height: 21px;
+        width: 19px;
+        height: 19px;
     }
 }

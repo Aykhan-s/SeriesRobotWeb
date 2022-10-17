@@ -8,7 +8,7 @@
 {% include 'components/message.html' %}
 <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 
-<table class="table" style="margin-bottom: 1.5rem;">
+<table class="table">
     <thead>
         <tr>
             <th scope="col">Title ({{series.paginator.count}})</th>
@@ -48,38 +48,40 @@
     </tbody>
 </table>
 
-<div style="float: left;">
-    <button type="button" class="btn btn-outline-primary">
-        <a href="/series/new-episodes/" style="text-decoration: none; color: inherit;">New Episodes</a>
-    </button>
-</div>
+<div style="margin-bottom: 8.5rem;">
+    <div class="btn-new-episode">
+        <button type="button" class="btn btn-outline-primary">
+            <a href="/series/new-episodes/" style="text-decoration: none; color: inherit;">New Episodes</a>
+        </button>
+    </div>
 
-<div style="float: right;">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-end">
-            {% if series.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1"><<</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{series.previous_page_number}}"><</a>
-                </li>
-            {% endif %}
+    <div class="pages">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                {% if series.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1"><<</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{series.previous_page_number}}"><</a>
+                    </li>
+                {% endif %}
 
-            {% if series.paginator.count > 5 %}
-                <li class="page-item"><a class="page-link" href="#">{{series.number}}</a></li>
-            {% endif %}
+                {% if series.paginator.count > 5 %}
+                    <li class="page-item"><a class="page-link" href="#">{{series.number}}</a></li>
+                {% endif %}
 
-            {% if series.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{series.next_page_number}}">></a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{series.paginator.num_pages}}">>></a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+                {% if series.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{series.next_page_number}}">></a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{series.paginator.num_pages}}">>></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
 </div>
 
 {% endblock content %}

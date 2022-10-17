@@ -1,15 +1,24 @@
+.table {
+    margin-bottom: 1.5rem;
+    width: 670px;
+}
+
+.table-div {
+    overflow-x: scroll;
+}
+
 @media only screen and (max-width: 510px) {
     table {
-        font-size: 85%;
+        font-size: 83%;
     }
 
     .edit-icon {
-        width: 15px;
-        height: 15px;
+        width: 18px;
+        height: 18px;
     }
 
     .trash-icon {
-        width: 17px;
-        height: 17px;
+        width: 19px;
+        height: 19px;
     }
 }

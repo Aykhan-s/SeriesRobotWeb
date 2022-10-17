@@ -6,7 +6,8 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_episodes.css' %}">
 
-<table class="table" style="margin-bottom: 1.5rem;">
+<div class="table-div">
+<table class="table">
     <thead>
         <tr>
             <th scope="col">Title</th>
@@ -24,10 +25,10 @@
                     </a>
                     <br>
                     <a class="btn mr-1 update-btn" style="padding: 0;" href="{% url 'update-series' s.slug %}">
-                        <img src="{% static 'icons/edit.png' %}" width="21px" height="21px">
+                        <img class="edit-icon" src="{% static 'icons/edit.png' %}" width="21px" height="21px">
                     </a>
                     <a class="btn delete-btn" href="{% url 'delete-series' s.slug %}">
-                        <img src="{% static 'icons/trash.png' %}" width="24px" height="24px">
+                        <img class="trash-icon" src="{% static 'icons/trash.png' %}" width="24px" height="24px">
                     </a>
                 </th>
                 <td>
@@ -45,5 +46,6 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 
 {% endblock content %}
