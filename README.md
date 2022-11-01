@@ -1,6 +1,3 @@
-## Demo Project Link
-https://series-notification.online
-
 ## Installition for Dev
 **pip install -r requirements.txt<br />
 cd src/<br />**
