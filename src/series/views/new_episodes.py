@@ -36,7 +36,11 @@ def episode_counter(request, s, data):
                 if (episode_date - now_date).days > 0:
                     raise ValueError
             except ValueError: 
-                return new_episodes_count, int(last_n)+1, last_i+1 if new_episodes_count > 0 else 0, 0, 0
+                try:
+                    return new_episodes_count, int(last_n)+1, last_i+1 if new_episodes_count > 0 else 0, 0, 0
+                except UnboundLocalError:
+                    return new_episodes_count, int(n)+1, last_i+1 if new_episodes_count > 0 else 0, 0, 0
+
             last_i = i
             new_episodes_count += 1
         last_n = n
