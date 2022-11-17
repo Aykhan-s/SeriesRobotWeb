@@ -7,6 +7,5 @@ src/config/settings/static
 Backup-codes-series.notification.txt
 celerybeat-schedule
 databasepostgresql_env
-ssh-private.key
-ssh-public.key
+SeriesRobot.pem
 certbot
