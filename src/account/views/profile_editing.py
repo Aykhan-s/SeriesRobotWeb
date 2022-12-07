@@ -42,20 +42,21 @@ def profile_editing_view(request):
                 user.email_notification_is_active = False
                 user.save()
                 to_email = form.cleaned_data.get('email')
-                current_site = get_current_site(request)
-                mail_subject = 'Activate your account.'
-                message = render_to_string('acc_active_email.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': default_token_generator.make_token(user),
-                })
-                email = EmailMessage(
-                    mail_subject, message, to=[to_email]
-                )
-                email.send()
-                messages.warning(request, "Please confirm your email address to receive notifications of new episodes.")
-                return redirect('homepage')
+                if to_email is not None:
+                    current_site = get_current_site(request)
+                    mail_subject = 'Activate your account.'
+                    message = render_to_string('acc_active_email.html', {
+                        'user': user,
+                        'domain': current_site.domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': default_token_generator.make_token(user),
+                    })
+                    email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+                    )
+                    email.send()
+                    messages.warning(request, "Please confirm your email address to receive notifications of new episodes.")
+                    return redirect('homepage')
 
             messages.success(request, 'Profile Updated')
             return redirect('homepage')

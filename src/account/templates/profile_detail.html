@@ -9,7 +9,13 @@
 <div class="card mb-3">
     <div class="card-body">
         <h5>Username: <small>{{profile.username}}</small></h5>
-        <h5>Email: <small>{{profile.email|default:""}}</small></h5>
+        {% if profile.email_notification_is_active %}
+            <h5>Email: <small style="margin-right: 0.7%;">{{profile.email|default:""}}</small>
+                <img src="{% static 'icons/verified.png' %}" alt="{% static 'icons/verified.png' %}" width="22px">
+            </h5>
+        {% else %}
+            <h5>Email: <small>{{profile.email|default:""}}</small></h5>
+        {% endif %}
         <h5>IMDB API Key: <small>{{profile.imdb_api_key}}</small></h5> 
     </div>
 </div>
