@@ -4,12 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from account.forms import ProfileEditingForm
 from requests import get
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.core.mail import EmailMessage
+from .send_otp import send_otp_view
 
 
 @login_required(login_url='/')
@@ -36,28 +31,40 @@ def profile_editing_view(request):
                     messages.info(request, f"IMDB API: {data['errorMessage']}")
                     return redirect('profile-editing')
 
-            form.save()
             if 'email' in form.changed_data:
-                user = request.user
-                user.email_notification_is_active = False
-                user.save()
                 to_email = form.cleaned_data.get('email')
                 if to_email is not None:
-                    current_site = get_current_site(request)
-                    mail_subject = 'Activate your account.'
-                    message = render_to_string('acc_active_email.html', {
-                        'user': user,
-                        'domain': current_site.domain,
-                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                        'token': default_token_generator.make_token(user),
-                    })
-                    email = EmailMessage(
-                        mail_subject, message, to=[to_email]
-                    )
-                    email.send()
-                    messages.warning(request, "Please confirm your email address to receive notifications of new episodes.")
-                    return redirect('homepage')
+                    if form.cleaned_data.get('send_email'):
+                        form.add_error('send_email', 'You must verify the email before enabling the send email feature')
+                        return render(request, 'profile_editing.html', context={"form": form})
+                    user = request.user
+                    user.email_is_verified = False
+                    form.save()
+                    user.save()
+                    return send_otp_view(request=request)
 
+                elif 'send_email' in form.changed_data and form.cleaned_data.get('send_email'):
+                    form.add_error('send_email', 'Email field is required to receive email notifications')
+                    return render(request, 'profile_editing.html', context={"form": form})
+
+                user = request.user
+                user.email_is_verified = False
+                user.send_email = False
+                form.save()
+                user.save()
+                messages.success(request, 'Profile Updated')
+                return redirect('homepage')
+
+            elif form.cleaned_data.get('send_email'):
+                if form.cleaned_data.get('email') is None:
+                    form.add_error('send_email', 'Email field is required to receive email notifications.')
+                    return render(request, 'profile_editing.html', context={"form": form})
+
+                elif not request.user.email_is_verified:
+                    form.add_error('send_email', 'You must first verify the email.')
+                    return render(request, 'profile_editing.html', context={"form": form})
+
+            form.save()
             messages.success(request, 'Profile Updated')
             return redirect('homepage')
 

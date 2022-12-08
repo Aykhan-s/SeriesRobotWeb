@@ -9,8 +9,13 @@
 
 <form method="POST" style="margin-bottom: 5.5rem;">
     {% csrf_token %}
-    {{form|crispy}}
-    <a href="https://imdb-api.com/Identity/Account/Register">Get API Key</a><br>
+    {{form.username|as_crispy_field}} <br>
+    {{form.email|as_crispy_field}} <br>
+    {{form.password1|as_crispy_field}} <br>
+    {{form.password2|as_crispy_field}} <br>
+    {{form.imdb_api_key|as_crispy_field}}
+    <a href="https://imdb-api.com/Identity/Account/Register">Get API Key</a> <br><br>
+    {{form.send_email|as_crispy_field}} <br>
     <style>
         .btn:hover {
             background: #fff;
@@ -22,4 +27,3 @@
 </form>
 
 {% endblock content %}
-    

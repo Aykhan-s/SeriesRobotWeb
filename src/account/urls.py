@@ -8,6 +8,7 @@ urlpatterns = [
         template_name = 'login.html'
         ), name='login'),
     path('register', views.register_view, name='register'),
+    path('send-otp', views.send_otp_view, name='send-otp'),
     path('activate/<uidb64>/<token>/', views.activate_view, name='activate'),
     path('logout', views.logout_view, name='logout'),
     path('change-password', views.change_password_view, name='change-password'),

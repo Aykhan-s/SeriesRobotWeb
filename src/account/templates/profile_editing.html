@@ -9,7 +9,10 @@
 
 <form enctype="multipart/form-data" method="POST">
     {% csrf_token %}
-    {{form|crispy}}
+    {{form.username|as_crispy_field}} <br>
+    {{form.email|as_crispy_field}} <br>
+    {{form.imdb_api_key|as_crispy_field}} <br>
+    {{form.send_email|as_crispy_field}} <br>
     <style>
         .btn:hover {
             background: #fff;

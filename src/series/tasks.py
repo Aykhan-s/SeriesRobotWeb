@@ -48,7 +48,7 @@ def episode_counter(imdb_api_key, s, data):
 
 @shared_task(name='send_emails')
 def send_feedback_email_task():
-    users = User.objects.filter(email_notification_is_active=True)
+    users = User.objects.filter(email_is_verified=True)
     for user in users:
         series = user.series.filter(show=True).order_by('-id')
         series_new_episodes = []

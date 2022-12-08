@@ -7,4 +7,4 @@ class ProfileEditingForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'imdb_api_key')
+        fields = ('email', 'username', 'imdb_api_key', 'send_email')
