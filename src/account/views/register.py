@@ -32,9 +32,6 @@ def register_view(request):  # sourcery skip: extract-method
                 return redirect('register')
 
             to_email = form.cleaned_data.get('email')
-            if to_email is None and form.cleaned_data.get('send_email'):
-                form.add_error('send_email', 'Email field is required to receive email notifications.')
-                return render(request, 'register.html', context={"form": form})
 
             form.save()
             username = form.cleaned_data.get('username')

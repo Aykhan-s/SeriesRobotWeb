@@ -9,3 +9,4 @@ celerybeat-schedule
 databasepostgresql_env
 SeriesRobot.pem
 certbot
+imdb_api_access

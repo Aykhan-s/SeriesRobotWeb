@@ -11,5 +11,4 @@ class RegisterForm(UserCreationForm):
                 'email',
                 'password1',
                 'password2',
-                'imdb_api_key',
-                'send_email')
+                'imdb_api_key')
