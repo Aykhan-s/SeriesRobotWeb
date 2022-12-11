@@ -3,68 +3,21 @@ from django.shortcuts import (render,
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from account.models import User
-from requests import get
-from datetime import datetime
+from imdb_api_access import SeriesCounter
+from imdb_api_access import MaximumUsageError
 
-
-def get_request(request, link):
-    raw_data = get(link)
-
-    if raw_data.status_code != 200:
-        messages.info(request, "Can't search for TV Series. Please try again.")
-        return redirect('homepage')
-    data = raw_data.json()
-
-    if data['errorMessage']:
-        messages.info(request, f"IMDB API: {data['errorMessage']}")
-        return redirect('homepage')
-    return data
-
-def episode_counter(request, s, data):
-    now_date = datetime.strptime(datetime.strftime(datetime.utcnow(),'%d %b %Y'), '%d %b %Y')
-    new_episodes_count = 0
-
-    for n in data['tvSeriesInfo']['seasons'][data['tvSeriesInfo']['seasons'].index(str(s.last_season)):]:
-        data = get_request(request, f"https://imdb-api.com/en/API/SeasonEpisodes/{request.user.imdb_api_key}/{s.imdb_id}/{n}")
-        if type(data) is not dict: return data
-
-        episodes = data['episodes']
-        for i in range(int(s.last_episode) if n == str(s.last_season) else 0, len(episodes)):
-            released_date = episodes[i]['released'].replace('.', '')
-            try:
-                episode_date = datetime.strptime(released_date, '%d %b %Y')
-                if (episode_date - now_date).days > 0:
-                    raise ValueError
-            except ValueError: 
-                try:
-                    return new_episodes_count, int(last_n)+1, last_i+1 if new_episodes_count > 0 else 0, 0, 0
-                except UnboundLocalError:
-                    return new_episodes_count, int(n), last_i+1 if new_episodes_count > 0 else 0, 0, 0
-
-            last_i = i
-            new_episodes_count += 1
-        last_n = n
-
-    return new_episodes_count, n, i+1 if new_episodes_count > 0 else 0, 0, 0
 
 @login_required(login_url='/account/login')
 def new_episodes_view(request):
     series = User.objects.get(id=request.user.id).series.filter(show=True).order_by('-id')
-    series_new_episodes = []
 
-    for s in series:
-        data = get_request(request, f"https://imdb-api.com/en/API/Title/{request.user.imdb_api_key}/{s.imdb_id}")
-        if type(data) is not dict: return data
-        data = episode_counter(request, s, data)
-        if type(data) is not tuple: return data
-        if data[0]:
-            series_new_episodes.append([s,
-                {'count': data[0],
-                'last_season': data[1],
-                'last_episode': data[2]}
-                ])
+    series_counter = SeriesCounter(request.user.imdb_api_key)
+    try:
+        series_counter.find_new_series(series)
+    except MaximumUsageError as e: ...
+        # messages.warning(request, f"{e} (some series could not be updated)")
 
-    if series_new_episodes:
-        return render(request, 'new_episodes.html', context={'data': series_new_episodes})
+    if series_counter.new_series_list:
+        return render(request, 'new_episodes.html', context={'data': series_counter.new_series_list})
     messages.warning(request, "There are no new episodes of any series :(")
     return redirect('homepage')
