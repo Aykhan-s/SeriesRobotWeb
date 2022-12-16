@@ -10,14 +10,26 @@ class SeriesModel(models.Model):
     title = models.CharField(max_length=35, blank=False, null=False)
     imdb_id = models.CharField(max_length=10, validators=[MinLengthValidator(9)],
                             blank=False, null=False)
-    last_season = models.IntegerField(validators=[
+    watched_season = models.IntegerField(validators=[
             MaxValueValidator(30),
             MinValueValidator(1)
         ], blank=False, null=False)
-    last_episode = models.IntegerField(validators=[
+    watched_episode = models.IntegerField(validators=[
             MaxValueValidator(60),
             MinValueValidator(1)
         ], blank=False, null=False)
+    last_season = models.IntegerField(validators=[
+            MaxValueValidator(30),
+            MinValueValidator(1)],
+            default=1)
+    last_episode = models.IntegerField(validators=[
+            MaxValueValidator(60),
+            MinValueValidator(1)],
+            default=1)
+    new_episodes_count = models.IntegerField(validators=[
+            MaxValueValidator(200),
+            MinValueValidator(0)],
+            default=0)
     show = models.BooleanField(default=True)
     slug = AutoSlugField(populate_from='title', unique=True)
 

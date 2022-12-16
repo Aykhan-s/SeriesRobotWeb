@@ -2,13 +2,19 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from account.models import User
+from django.db.models import Q
 
 
 @login_required(login_url='/account/login')
 def homepage_view(request):
     user = User.objects.get(id=request.user.id)
-    series_true = user.series.filter(show=True).order_by('-id')
-    series_false = user.series.filter(show=False).order_by('-id')
+    if request.GET.get('new') == 'true':
+        series_true = user.series.filter(~Q(new_episodes_count=0), show=True).order_by('-id')
+        series_false = user.series.filter(~Q(new_episodes_count=0), show=False).order_by('-id')
+    else:
+        series_true = user.series.filter(show=True).order_by('-id')
+        series_false = user.series.filter(show=False).order_by('-id')
+
     page = request.GET.get('page')
     paginator = Paginator(list(series_true) + list(series_false), 5)
 

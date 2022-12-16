@@ -5,78 +5,61 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from celery.utils.log import get_task_logger
+from imdb_api_access import SeriesCounter
+from imdb_api_access import MaximumUsageError
 
 
-logger = get_task_logger(__name__)
+# logger = get_task_logger(__name__)
 
-def get_request(link):
-    raw_data = get(link)
 
-    if raw_data.status_code == 200:
-        data = raw_data.json()
-        if not data['errorMessage']:
-            return data
-        logger.info(f"error message: {data['errorMessage']}\nlink: {link}")
-        return None
-    logger.info(f"status code: {raw_data.status_code}\nlink: {link}")
+def update_series(updated_series):
+    updated_series.series.last_season = updated_series.last_season
+    updated_series.series.last_episode = updated_series.last_episode
+    updated_series.series.new_episodes_count = updated_series.new_episodes_count
 
-def episode_counter(imdb_api_key, s, data):
-    now_date = datetime.strptime(datetime.strftime(datetime.utcnow(),'%d %b %Y'), '%d %b %Y')
-    new_episodes_count = 0
+def send_email(user):
+    series = user.series.filter(show=True).order_by('-id')
 
-    for n in data['tvSeriesInfo']['seasons'][data['tvSeriesInfo']['seasons'].index(str(s.last_season)):]:
-        data = get_request(f"https://imdb-api.com/en/API/SeasonEpisodes/{imdb_api_key}/{s.imdb_id}/{n}")
-        if data is None: return None
-
-        episodes = data['episodes']
-        for i in range(int(s.last_episode) if n == str(s.last_season) else 0, len(episodes)):
-            released_date = episodes[i]['released'].replace('.', '')
-            try:
-                episode_date = datetime.strptime(released_date, '%d %b %Y')
-                if (episode_date - now_date).days > 0:
-                    raise ValueError
-            except ValueError:
-                try:
-                    return new_episodes_count, int(last_n)+1, last_i+1 if new_episodes_count > 0 else 0, 0, 0
-                except UnboundLocalError:
-                    return new_episodes_count, int(n), last_i+1 if new_episodes_count > 0 else 0, 0, 0
-            last_i = i
-            new_episodes_count += 1
-        last_n = n
-
-    return new_episodes_count, n, i+1 if new_episodes_count > 0 else 0, 0, 0
-
-@shared_task(name='send_emails')
-def send_feedback_email_task():
-    users = User.objects.filter(send_email=True)
-    for user in users:
-        series = user.series.filter(show=True).order_by('-id')
-        series_new_episodes = []
-
-        for s in series:
-            data = get_request(f"https://imdb-api.com/en/API/Title/{user.imdb_api_key}/{s.imdb_id}")
-
-            if data is None:
-                series_new_episodes = []
-                break
-            data = episode_counter(user.imdb_api_key, s, data)
-            if data is None:
-                series_new_episodes = []
-                break
-
-            if data[0]:
-                series_new_episodes.append([s,
-                    {'count': data[0],
-                    'last_season': data[1],
-                    'last_episode': data[2]}
-                    ])
-
-        if series_new_episodes:
-            message = render_to_string('new_episodes_verification.html', {
+    series_counter = SeriesCounter(user.imdb_api_key)
+    try:
+        series_counter.find_new_series(series)
+        series_len = len(series_counter.new_series_list)
+    except MaximumUsageError as e:
+        if series_len := len(series_counter.new_series_list):
+            for updated_series in series_counter.new_series_list:
+                update_series(updated_series)
+                updated_series.save()
+            message = render_to_string('new_episodes_notification.html', {
                 'user': user,
-                'data': series_new_episodes
+                'new_series_list': series_counter.new_series_list,
+                'error_series_list': series_counter.error_series,
+                'maximum_usage': str(e)
             })
             email = EmailMessage(
                 'New Episodes!', message, to=[user.email]
             )
             email.send()
+            return
+        return
+
+    if series_len:
+        for updated_series in series_counter.new_series_list:
+            update_series(updated_series)
+            updated_series.series.save()
+
+        message = render_to_string('new_episodes_notification.html', {
+            'user': user,
+            'new_series_list': series_counter.new_series_list,
+            'error_series_list': series_counter.error_series,
+            'maximum_usage': ''
+        })
+        email = EmailMessage(
+            'New Episodes!', message, to=[user.email]
+        )
+        email.send()
+        return
+
+@shared_task(name='send_emails')
+def send_feedback_email_task():
+    users = User.objects.filter(send_email=True)
+    for user in users: send_email(user)

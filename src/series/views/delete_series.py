@@ -7,7 +7,7 @@ from django.contrib import messages
 
 class SeriesDeleteView(LoginRequiredMixin, DeleteView):
     login_url = reverse_lazy('login')
-    template_name = 'article_deletion_confirmation.html'
+    template_name = 'series_deletion_confirmation.html'
 
     def get_success_url(self):
         messages.success(self.request, 'Series Deleted')

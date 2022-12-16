@@ -1,0 +1,36 @@
+{% autoescape off %}  
+
+Hi {{ user.username }},  
+There are new episodes of the series you recorded.
+
+{% if maximum_usage %}
+Some series could not be updated ({{maximum_usage}})
+
+{% for s in new_series_list %}
+{{s.series.title}}: watched - {{s.series.watched_season}}-{{s.series.watched_episode}}
+                    last - {{s.last_season}}-{{s.last_episode}}
+                    new episodes count - {{s.new_episodes_count}}
+{% endfor %}
+
+{% else %}
+    {% if error_series_list %}
+Some series could not be updated:
+        {% for e in error_series_list %}
+e.title
+        {% endfor %}
+
+        {% for s in new_series_list %}
+{{s.series.title}}: watched - {{s.series.watched_season}}-{{s.series.watched_episode}}
+                    last - {{s.last_season}}-{{s.last_episode}}
+                    new episodes count - {{s.new_episodes_count}}
+        {% endfor %}
+    {% else %}
+        {% for s in new_series_list %}
+{{s.series.title}}: watched - {{s.series.watched_season}}-{{s.series.watched_episode}}
+                    last - {{s.last_season}}-{{s.last_episode}}
+                    new episodes count - {{s.new_episodes_count}}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% endautoescape %}

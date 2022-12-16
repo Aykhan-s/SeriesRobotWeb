@@ -13,6 +13,6 @@ def get_request(url: str) -> Union[StatusCodeError, APIError, MaximumUsageError,
 
     if data['errorMessage']:
         if 'Maximum usage' in data['errorMessage']:
-            raise MaximumUsageError()
+            raise MaximumUsageError(data['errorMessage'])
         raise APIError(data['errorMessage'])
     return data

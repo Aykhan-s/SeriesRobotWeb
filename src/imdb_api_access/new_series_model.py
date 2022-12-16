@@ -6,6 +6,6 @@ from typing import Optional
 @dataclass
 class NewSeries:
     series: SeriesModel
-    new_episodes_count: Optional[int] = None
-    last_season: Optional[int] = None
-    last_episode: Optional[int] = None
+    new_episodes_count: int
+    last_season: int
+    last_episode: int

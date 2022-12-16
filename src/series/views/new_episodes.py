@@ -1,5 +1,4 @@
-from django.shortcuts import (render,
-                            redirect)
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from account.models import User
@@ -14,10 +13,41 @@ def new_episodes_view(request):
     series_counter = SeriesCounter(request.user.imdb_api_key)
     try:
         series_counter.find_new_series(series)
-    except MaximumUsageError as e: ...
-        # messages.warning(request, f"{e} (some series could not be updated)")
+        series_len = len(series_counter.new_series_list)
+        error_series_len = len(series_counter.error_series)
+    except MaximumUsageError as e:
+        if series_len := len(series_counter.new_series_list):
+            for updated_series in series_counter.new_series_list:
+                updated_series.series.last_season = updated_series.last_season
+                updated_series.series.last_episode = updated_series.last_episode
+                updated_series.series.new_episodes_count = updated_series.new_episodes_count
+                updated_series.save()
+            messages.warning(request,
+                f"{series_len} series updated (some series could not be updated). {str(e)}")
+            return redirect('homepage')
 
-    if series_counter.new_series_list:
-        return render(request, 'new_episodes.html', context={'data': series_counter.new_series_list})
-    messages.warning(request, "There are no new episodes of any series :(")
+        messages.warning(request,
+            f"Series could not be updated. {str(e)}")
+        return redirect('homepage')
+
+    if series_len:
+        for updated_series in series_counter.new_series_list:
+            updated_series.series.last_season = updated_series.last_season
+            updated_series.series.last_episode = updated_series.last_episode
+            updated_series.series.new_episodes_count = updated_series.new_episodes_count
+            updated_series.series.save()
+        if error_series_len:
+            messages.warning(request,
+                f"{series_len} series updated ({error_series_len} series could not be updated).")
+            return redirect('homepage')
+        messages.warning(request,
+            f"{series_len} series updated.")
+        return redirect('homepage')
+
+    if error_series_len:
+        messages.warning(request,
+            f"{error_series_len} series could not be updated.")
+        return redirect('homepage')
+
+    messages.warning(request, "0 series updated :(")
     return redirect('homepage')

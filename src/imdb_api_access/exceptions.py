@@ -20,4 +20,4 @@ class MaximumUsageError(Exception):
         self.message = message
 
     def __str__(self) -> str:
-        return self.message
+        return f"IMDB API: {self.message}"

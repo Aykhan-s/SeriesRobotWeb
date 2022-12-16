@@ -3,7 +3,8 @@ from django.shortcuts import (render,
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from account.forms import ProfileEditingForm
-from requests import get
+from imdb_api_access._requests import get_request
+from imdb_api_access.exceptions import *
 from .send_otp import send_otp_view
 
 
@@ -13,22 +14,19 @@ def profile_editing_view(request):
         form = ProfileEditingForm(request.POST, instance=request.user)
         if form.is_valid():
             if 'imdb_api_key' in form.changed_data:
-                raw_data = get(f"https://imdb-api.com/en/API/Title/{request.POST['imdb_api_key']}/tt0110413")
-
-                if raw_data.status_code != 200:
+                try:
+                    get_request(f"https://imdb-api.com/en/API/Title/{request.POST['imdb_api_key']}/tt0110413")
+                except StatusCodeError:
                     messages.info(request, 'Account not created. Please try again later')
                     return redirect('profile-editing')
-                data = raw_data.json()
-
-                if data['errorMessage']:
-                    if 'Maximum usage' in data['errorMessage']:
-                        messages.info(request, f"IMDB API: {data['errorMessage']}")
-                        return redirect('profile-editing')
-
-                    elif data['errorMessage'] == 'Invalid API Key':
+                except MaximumUsageError as e:
+                    messages.info(request, str(e))
+                    return redirect('profile-editing')
+                except APIError as e:
+                    if e.message == 'Invalid API Key':
                         form.add_error('imdb_api_key', 'Invalid API Key')
                         return render(request, 'profile_editing.html', context={"form": form})
-                    messages.info(request, f"IMDB API: {data['errorMessage']}")
+                    messages.info(request, str(e))
                     return redirect('profile-editing')
 
             if 'email' in form.changed_data:

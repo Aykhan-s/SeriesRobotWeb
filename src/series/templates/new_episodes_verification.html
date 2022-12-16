@@ -1,9 +1,0 @@
-{% autoescape off %}  
-
-Hi {{ user.username }},  
-There are new episodes of the series you recorded.
-{% for s, d in data %}
-{{d.count}} episodes of {{s.title}} you haven't watched (watched episode: {{s.last_season}} - {{s.last_episode}}).
-{% endfor %}
-
-{% endautoescape %}

@@ -12,7 +12,9 @@
     <thead>
         <tr>
             <th scope="col">Title ({{series.paginator.count}})</th>
-            <th scope="col">Season - Episode</th>
+            <th scope="col">Watched</th>
+            <th scope="col">Last</th>
+            <th scope="col">Unwatched</th>
             <th scope="col">Show</th>
         </tr>
     </thead>
@@ -33,8 +35,16 @@
                 </th>
                 <td>
                     <a href="https://www.imdb.com/title/{{s.imdb_id}}/episodes?season={{s.last_season}}" style="text-decoration: none;" target="_blank">
+                        {{s.watched_season}} - {{s.watched_episode}}
+                    </a>
+                </td>
+                <td>
+                    <a href="https://www.imdb.com/title/{{s.imdb_id}}/episodes?season={{s.last_season}}" style="text-decoration: none;" target="_blank">
                         {{s.last_season}} - {{s.last_episode}}
                     </a>
+                </td>
+                <td>
+                    {{s.new_episodes_count}}
                 </td>
                 <td>
                     {% if s.show %}
@@ -51,7 +61,13 @@
 <div style="margin-bottom: 8.5rem;">
     <div class="btn-new-episode">
         <button type="button" class="btn btn-outline-primary">
-            <a href="/series/new-episodes/" style="text-decoration: none; color: inherit;">New Episodes</a>
+            <a href="/" style="text-decoration: none; color: inherit;">All</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary" style="margin-left: 4px;">
+            <a href="?new=true" style="text-decoration: none; color: inherit;">Unwatched</a>
+        </button> <br>
+        <button type="button" class="btn btn-outline-primary" style="margin-top: 4.7%; margin-bottom: 77%;">
+            <a href="/series/new-episodes/" style="text-decoration: none; color: inherit;">Update</a>
         </button>
     </div>
 
