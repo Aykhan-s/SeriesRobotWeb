@@ -29,8 +29,8 @@ class AddSeriesView(LoginRequiredMixin, CreateView):
         except StatusCodeError:
             messages.info(self.request, 'TV Series can not added. Please try again.')
             return redirect('add-series')
-        except MaximumUsageError:
-            messages.info(self.request, f"IMDB API: {data['errorMessage']}")
+        except MaximumUsageError as e:
+            messages.info(self.request, str(e))
             return redirect('add-series')
         except APIError:
             form.add_error('imdb_id', 'ID is not correct.')
@@ -51,8 +51,8 @@ class AddSeriesView(LoginRequiredMixin, CreateView):
         except StatusCodeError:
             messages.info(self.request, 'TV Series can not added. Please try again.')
             return redirect('add-series')
-        except MaximumUsageError:
-            messages.info(self.request, f"IMDB API: {data['errorMessage']}")
+        except MaximumUsageError as e:
+            messages.info(self.request, str(e))
             return redirect('add-series')
         except APIError:
             form.add_error('imdb_id', 'ID is not correct.')
