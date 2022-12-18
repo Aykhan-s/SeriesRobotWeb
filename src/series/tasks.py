@@ -2,9 +2,9 @@ from celery import shared_task
 from account.models import User
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-# from celery.utils.log import get_task_logger
 from imdb_api_access import SeriesCounter
 from imdb_api_access import MaximumUsageError
+# from celery.utils.log import get_task_logger
 
 
 # logger = get_task_logger(__name__)

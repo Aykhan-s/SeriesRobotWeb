@@ -1,6 +1,6 @@
 from django.views.generic import DetailView
 from account.models import User
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 

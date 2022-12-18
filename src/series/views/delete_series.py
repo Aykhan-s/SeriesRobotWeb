@@ -1,8 +1,9 @@
 from series.models import SeriesModel
 from django.views.generic import DeleteView
-from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.urls import (reverse_lazy,
+                        reverse)
 
 
 class SeriesDeleteView(LoginRequiredMixin, DeleteView):

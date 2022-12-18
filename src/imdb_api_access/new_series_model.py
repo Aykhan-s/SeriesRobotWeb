@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from series.models import SeriesModel
-from typing import Optional
 
 
 @dataclass
