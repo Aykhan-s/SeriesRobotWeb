@@ -10,6 +10,15 @@
     float: right;
 }
 
+.search-form {
+    width: 370px;
+    display: flex;
+}
+
+.search-form input {
+    margin-right: 1rem;
+}
+
 @media only screen and (max-width: 510px) {
     table {
         font-size: 87%;
@@ -23,5 +32,16 @@
     .trash-icon {
         width: 19px;
         height: 19px;
+    }
+
+    .search-form {
+        width: 330px;
+        display: flex;
+    }
+
+    .search-form input {
+        margin-top: 4px;
+        height: 45px;
+        margin-right: 1rem;
     }
 }

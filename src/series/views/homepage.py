@@ -8,14 +8,18 @@ from django.db.models import Q
 @login_required(login_url='/account/login')
 def homepage_view(request):
     user = User.objects.get(id=request.user.id)
+
     if request.GET.get('new') == 'true':
-        series_true = user.series.filter(~Q(new_episodes_count=0), show=True).order_by('-id')
-        series_false = user.series.filter(~Q(new_episodes_count=0), show=False).order_by('-id')
-    else:
-        series_true = user.series.filter(show=True).order_by('-id')
-        series_false = user.series.filter(show=False).order_by('-id')
+        series = user.series.filter(~Q(new_episodes_count=0)).order_by('-id')
+
+    else: series = user.series.filter().order_by('-id')
+
+    if search := request.GET.get('search'):
+        series = series.filter(
+            Q(title__icontains=search)
+        )
 
     page = request.GET.get('page')
-    paginator = Paginator(list(series_true) + list(series_false), 5)
+    paginator = Paginator(series, 5)
 
     return render(request, 'homepage.html', context={'series': paginator.get_page(page)})
