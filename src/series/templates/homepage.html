@@ -9,8 +9,17 @@
 <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 
 <form action="{% url 'homepage' %}" class="form-inline my-2 mb-3 search-form">
-    <input name="search" type="text" class="form-control" placeholder="Search">
-    <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit">Search</button>
+    <div style="display: flex;">
+        <input name="search" type="text" class="form-control search-input" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit">Search</button>
+    </div>
+    <br>
+    <input id="all" name="type" type="radio" checked>
+    <label for="all" style="margin-right: 1.5rem;">All</label>
+    <input id="watched" name="type" type="radio" value="watched">
+    <label for="watched" style="margin-right: 1.5rem;">Watched</label>
+    <input id="unwatched" name="type" type="radio" value="unwatched">
+    <label for="unwatched">Unwatched</label>
 </form>
 
 <table class="table">
@@ -62,29 +71,24 @@
         {% endfor %}
     </tbody>
 </table>
-
-<div style="margin-bottom: 8.5rem;">
+<div style="margin-bottom: 11rem;">
     <div class="btn-new-episode">
         <button type="button" class="btn btn-outline-primary">
-            <a href="/" style="text-decoration: none; color: inherit;">All</a>
-        </button>
-        <button type="button" class="btn btn-outline-primary" style="margin-left: 4px;">
-            <a href="?new=true" style="text-decoration: none; color: inherit;">Unwatched</a>
-        </button> <br>
-        <button type="button" class="btn btn-outline-primary" style="margin-top: 4.7%; margin-bottom: 77%;">
-            <a href="/series/new-episodes/" style="text-decoration: none; color: inherit;">Update</a>
+            <a href="/series/new-episodes/" style="text-decoration: none; color: inherit;">Update All</a>
         </button>
     </div>
+
+    {{view}}
 
     <div class="pages">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end">
                 {% if series.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page=1"><<</a>
+                        <a class="page-link" href="?page=1&{{kwargs}}"><<</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{series.previous_page_number}}"><</a>
+                        <a class="page-link" href="?page={{series.previous_page_number}}&{{kwargs}}"><</a>
                     </li>
                 {% endif %}
 
@@ -94,10 +98,10 @@
 
                 {% if series.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{series.next_page_number}}">></a>
+                        <a class="page-link" href="?page={{series.next_page_number}}&{{kwargs}}">></a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{series.paginator.num_pages}}">>></a>
+                        <a class="page-link" href="?page={{series.paginator.num_pages}}&{{kwargs}}">>></a>
                     </li>
                 {% endif %}
             </ul>

@@ -12,10 +12,9 @@
 
 .search-form {
     width: 370px;
-    display: flex;
 }
 
-.search-form input {
+.search-form .search-input {
     margin-right: 1rem;
 }
 
@@ -36,10 +35,9 @@
 
     .search-form {
         width: 330px;
-        display: flex;
     }
 
-    .search-form input {
+    .search-form .search-input {
         margin-top: 4px;
         height: 45px;
         margin-right: 1rem;
