@@ -27,17 +27,15 @@ def send_email(user):
             for updated_series in series_counter.new_series_list:
                 update_series(updated_series)
                 updated_series.save()
-            message = render_to_string('new_episodes_notification.html', {
+            message = render_to_string('email/maximum_usage_notification.html', {
                 'user': user,
                 'new_series_list': series_counter.new_series_list,
-                'error_series_list': series_counter.error_series,
                 'maximum_usage': str(e)
             })
             email = EmailMessage(
                 'New Episodes!', message, to=[user.email]
             )
             email.send()
-            return
         return
 
     if series_len:
@@ -45,11 +43,21 @@ def send_email(user):
             update_series(updated_series)
             updated_series.series.save()
 
-        message = render_to_string('new_episodes_notification.html', {
+        if series_counter.error_series:
+            message = render_to_string('email/error_series_notification.html', {
+                'user': user,
+                'new_series_list': series_counter.new_series_list,
+                'error_series_list': series_counter.error_series
+            })
+            email = EmailMessage(
+                'New Episodes!', message, to=[user.email]
+            )
+            email.send()
+            return
+
+        message = render_to_string('email/error_series_notification.html', {
             'user': user,
-            'new_series_list': series_counter.new_series_list,
-            'error_series_list': series_counter.error_series,
-            'maximum_usage': ''
+            'new_series_list': series_counter.new_series_list
         })
         email = EmailMessage(
             'New Episodes!', message, to=[user.email]
