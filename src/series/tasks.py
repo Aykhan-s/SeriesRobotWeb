@@ -55,7 +55,7 @@ def send_email(user):
             email.send()
             return
 
-        message = render_to_string('email/error_series_notification.html', {
+        message = render_to_string('email/new_series_notification.html', {
             'user': user,
             'new_series_list': series_counter.new_series_list
         })
