@@ -1,8 +1,8 @@
 {% autoescape off %}
 Hi {{ user.username }},
-There are new episodes of the series you recorded.
+{{new_series_list|length}} series updated.
 
-Some series could not be updated:
+{{error_series_list|length}} series could not be updated:
 {% for e in error_series_list %}
 e.title
 {% endfor %}

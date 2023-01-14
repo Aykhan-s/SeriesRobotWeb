@@ -49,5 +49,5 @@ def new_episodes_view(request):
             f"{error_series_len} series could not be updated.")
         return redirect('homepage')
 
-    messages.warning(request, "0 series updated :(")
+    messages.warning(request, "0 series updated")
     return redirect('homepage')
