@@ -1,3 +1,6 @@
+#### This website uses imdb api to send users new episode notifications of their recorded series via e-mail.
+<br />
+
 ## Installition for Dev
 **pip install -r requirements.txt<br />
 cd src/<br />**
