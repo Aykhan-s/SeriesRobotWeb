@@ -4,7 +4,7 @@ Hi {{ user.username }},
 
 {{error_series_list|length}} series could not be updated:
 {% for e in error_series_list %}
-e.title
+{{e.title}}
 {% endfor %}
 {% for s in new_series_list %}
 {{s.series.title}}: watched - {{s.series.watched_season}}-{{s.series.watched_episode}}, last - {{s.last_season}}-{{s.last_episode}}, new episodes count - {{s.new_episodes_count}}
