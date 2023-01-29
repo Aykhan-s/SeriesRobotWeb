@@ -11,6 +11,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
+    {% block favicon %}
+        <link rel="shortcut icon" href="{% static 'icons/favicons/homepage.ico' %}" type="image/x-icon">
+    {% endblock favicon %}
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>

@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 
+{% block favicon %}
+    <link rel="shortcut icon" href="{% static 'icons/favicons/edit-series.ico' %}" type="image/x-icon">
+{% endblock favicon %}
 {% block title %} Update Series {% endblock title %}
 
 {% block content %}

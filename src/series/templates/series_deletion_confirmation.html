@@ -1,8 +1,12 @@
 
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 
+{% block favicon %}
+    <link rel="shortcut icon" href="{% static 'icons/favicons/series-delete.ico' %}" type="image/x-icon">
+{% endblock favicon %}
 {% block title %} Deletion Confirmation {% endblock title %}
 
 {% block content %}

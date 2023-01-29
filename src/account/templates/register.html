@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 
+{% block favicon %}
+    <link rel="shortcut icon" href="{% static 'icons/favicons/login.ico' %}" type="image/x-icon">
+{% endblock favicon %}
 {% block title %} Signup {% endblock title %}
 
 {% block content %}

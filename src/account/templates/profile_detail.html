@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block favicon %}
+    <link rel="shortcut icon" href="{% static 'icons/favicons/profile.ico' %}" type="image/x-icon">
+{% endblock favicon %}
 {% block title %} Profile {% endblock title %}
 
 {% block content %}
