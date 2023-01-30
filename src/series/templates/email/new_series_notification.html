@@ -1,7 +1,10 @@
-{% autoescape off %}
-Hi {{ user.username }},
-{{new_series_list|length}} series updated.
+<h2>Hi, {{user.username}}</h2>
+<pre style="font-size: 1.4vw;">{{new_series_list|length}} series updated</pre>
+<pre style="font-size: 1vw;">
 {% for s in new_series_list %}
-{{s.series.title}}: watched - {{s.series.watched_season}}-{{s.series.watched_episode}}, last - {{s.last_season}}-{{s.last_episode}}, new episodes count - {{s.new_episodes_count}}
+<a href="https://www.imdb.com/title/{{s.series.imdb_id}}/" style="text-decoration: none;">{{s.series.title}}:</a>
+    watched: <a href="https://www.imdb.com/title/{{s.series.imdb_id}}/episodes?season={{s.series.watched_season}}" style="text-decoration: none;">{{s.series.watched_season}}-{{s.series.watched_episode}}</a>
+    last: <a href="https://www.imdb.com/title/{{s.series.imdb_id}}/episodes?season={{s.last_season}}" style="text-decoration: none;">{{s.last_season}}-{{s.last_episode}}</a>
+    number of new episodes: {{s.new_episodes_count}}
 {% endfor %}
-{% endautoescape %}
+</pre>
