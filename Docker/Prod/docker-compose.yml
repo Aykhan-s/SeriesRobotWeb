@@ -15,8 +15,13 @@ services:
     restart: always
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.production
-    build: .
-    command: gunicorn --chdir src --bind 0.0.0.0:8000 config.wsgi
+    build:
+      context: ../../
+      dockerfile: Docker/Prod/Dockerfile
+    command: >
+      bash -c "python3 src/manage.py makemigrations
+        && python3 src/manage.py migrate
+        && gunicorn --chdir src --bind 0.0.0.0:8000 config.wsgi"
     ports:
       - "8000:8000"
     depends_on:

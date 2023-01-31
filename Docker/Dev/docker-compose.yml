@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  django:
+    restart: always
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.development
+    build:
+      context: ../../
+      dockerfile: Docker/Dev/Dockerfile
+    command: >
+        bash -c "python3 src/manage.py makemigrations
+        && python3 src/manage.py migrate
+        && python src/manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../src:/code/src

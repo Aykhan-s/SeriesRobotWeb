@@ -1,5 +1,3 @@
 src/celerybeat-schedule
-src/.env.example
-src/db.sqlite3
-config/db/databasepostgresql_env.example
+**/*.example
 **/__pycache__
