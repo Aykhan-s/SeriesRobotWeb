@@ -6,7 +6,7 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
     env_file:
-      - config/db/databasepostgresql_env
+      - ../../config/db/databasepostgresql_env
 
   rabbitmq:
     image: rabbitmq
@@ -19,8 +19,9 @@ services:
       context: ../../
       dockerfile: Docker/Prod/Dockerfile
     command: >
-      bash -c "python3 src/manage.py makemigrations
+        bash -c "python3 src/manage.py makemigrations
         && python3 src/manage.py migrate
+        && python3 src/manage.py collectstatic --noinput
         && gunicorn --chdir src --bind 0.0.0.0:8000 config.wsgi"
     ports:
       - "8000:8000"
@@ -36,9 +37,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./config/nginx/server.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./config/certbot/conf:/etc/letsencrypt
-      - ./config/certbot/www:/var/www/certbot
+      - ../../config/nginx/server.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../../config/certbot/conf:/etc/letsencrypt
+      - ../../config/certbot/www:/var/www/certbot
       - static_volume:/django_static
     depends_on:
       - django
@@ -47,8 +48,8 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - ./config/certbot/conf:/etc/letsencrypt
-      - ./config/certbot/www:/var/www/certbot
+      - ../../config/certbot/conf:/etc/letsencrypt
+      - ../../config/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
