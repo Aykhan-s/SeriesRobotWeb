@@ -16,7 +16,9 @@ def homepage_view(request):
     elif type_ == 'watched':
         series = user.series.filter(new_episodes_count=0).order_by('-id')
 
-    else: series = user.series.filter().order_by('-id')
+    else:
+        type_ = 'all'
+        series = user.series.filter().order_by('-id')
 
     search = request.GET.get('search', 'None')
     if search != 'None':
@@ -33,4 +35,5 @@ def homepage_view(request):
     paginator = Paginator(series, 5)
 
     return render(request, 'homepage.html', context={'series': paginator.get_page(page),
-                                                    'kwargs': kwargs()})
+                                                    'kwargs': kwargs(),
+                                                    'type': type_})
