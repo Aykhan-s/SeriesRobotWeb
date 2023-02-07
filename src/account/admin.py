@@ -6,7 +6,7 @@ from .models import User
 @admin.register(User)
 class CustomAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username', 'email', 'imdb_api_key', 'password')}),
         (('Permissions'), {
             'fields': ('is_active', 'email_is_verified', 'send_email', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
