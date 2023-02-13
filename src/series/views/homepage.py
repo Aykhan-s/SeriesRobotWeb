@@ -20,8 +20,8 @@ def homepage_view(request):
         type_ = 'all'
         series = user.series.filter().order_by('-id')
 
-    search = request.GET.get('search', 'None')
-    if search != 'None':
+    search = request.GET.get('search', '')
+    if search != '':
         series = series.filter(
             Q(title__icontains=search)
         )
@@ -36,4 +36,5 @@ def homepage_view(request):
 
     return render(request, 'homepage.html', context={'series': paginator.get_page(page),
                                                     'kwargs': kwargs(),
-                                                    'type': type_})
+                                                    'type': type_,
+                                                    'search': search,})
