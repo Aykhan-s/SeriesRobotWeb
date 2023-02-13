@@ -19,10 +19,14 @@ services:
       context: ../../
       dockerfile: Docker/Prod/Dockerfile
     command: >
-        bash -c "python3 src/manage.py makemigrations
-        && python3 src/manage.py migrate
-        && python3 src/manage.py collectstatic --noinput
-        && gunicorn --chdir src --bind 0.0.0.0:8000 config.wsgi"
+        bash -c "cd src
+        && python3 manage.py makemigrations
+        && echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ makemigrations completed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+        && python3 manage.py migrate
+        && echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ migrate completed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+        && python3 manage.py collectstatic --noinput
+        && echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ collectstatic completed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+        && gunicorn --bind 0.0.0.0:8000 config.wsgi"
     ports:
       - "8000:8000"
     depends_on:
@@ -30,6 +34,32 @@ services:
       - rabbitmq
     volumes:
       - static_volume:/django_static
+
+  celery-worker:
+    restart: always
+    build:
+      context: ../../
+      dockerfile: Docker/Prod/Dockerfile
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    command: >
+        bash -c "cd src
+        && celery -A config worker -l info -f worker.log"
+    depends_on:
+      - django
+
+  celery-beat:
+    restart: always
+    build:
+      context: ../../
+      dockerfile: Docker/Prod/Dockerfile
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    command: >
+        bash -c "cd src
+        && celery -A config beat -l info -f beat.log"
+    depends_on:
+      - celery-worker
 
   nginx:
     image: nginx
@@ -41,6 +71,7 @@ services:
     depends_on:
       - django
 
+#TODO: add volume for celery logs
 volumes:
   dbdata:
   static_volume:
