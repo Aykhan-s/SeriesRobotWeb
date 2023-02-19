@@ -14,25 +14,29 @@
         <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit">Search</button>
     </div>
     <br>
-    {% if type == "all" %}
-        <input id="all" name="type" type="radio" value="all" checked>
-    {% else %}
         <input id="all" name="type" type="radio" value="all">
-    {% endif %}
         <label for="all" style="margin-right: 1.5rem;">All</label>
-    {% if type == "watched" %}
-        <input id="watched" name="type" type="radio" value="watched" checked>
-    {% else %}
+
         <input id="watched" name="type" type="radio" value="watched">
-    {% endif %}
         <label for="watched" style="margin-right: 1.5rem;">Watched</label>
-    {% if type == "unwatched" %}
-        <input id="unwatched" name="type" type="radio" value="unwatched" checked>
-    {% else %}
+
         <input id="unwatched" name="type" type="radio" value="unwatched">
-    {% endif %}
         <label for="unwatched">Unwatched</label>
 </form>
+
+<script>
+    switch ("{{type}}") {
+        case 'all':
+            document.getElementById('all').checked = true;
+            break;
+        case 'watched':
+            document.getElementById('watched').checked = true;
+            break;
+        case 'unwatched':
+            document.getElementById('unwatched').checked = true;
+            break;
+    }
+</script>
 
 <table class="table">
     <thead>
