@@ -20,7 +20,8 @@ services:
       dockerfile: Docker/Prod/Dockerfile
     command: >
         bash -c "cd src
-        && python3 manage.py makemigrations
+        && python3 manage.py makemigrations account
+        && python3 manage.py makemigrations series
         && echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ makemigrations completed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         && python3 manage.py migrate
         && echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ migrate completed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
