@@ -5,7 +5,7 @@ from .exceptions import *
 
 
 def get_request(url: str) -> Union[StatusCodeError, APIError, MaximumUsageError, Dict]:
-    raw_data = get(url)
+    raw_data = get(url, timeout=7)
 
     if raw_data.status_code != 200:
         raise StatusCodeError(raw_data.status_code)

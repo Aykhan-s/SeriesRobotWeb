@@ -9,9 +9,11 @@ services:
       context: ../../
       dockerfile: Docker/Dev/Dockerfile
     command: >
-        bash -c "python3 src/manage.py makemigrations
-        && python3 src/manage.py migrate
-        && python src/manage.py runserver 0.0.0.0:8000"
+        bash -c "cd src
+        && python3 manage.py makemigrations account
+        && python3 manage.py makemigrations series
+        && python3 manage.py migrate
+        && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
