@@ -27,7 +27,7 @@ services:
         && echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ migrate completed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         && python3 manage.py collectstatic --noinput
         && echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ collectstatic completed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-        && gunicorn --bind 0.0.0.0:8000 config.wsgi"
+        && gunicorn --bind 0.0.0.0:8000 --timeout 60 config.wsgi"
     ports:
       - "8000:8000"
     depends_on:
