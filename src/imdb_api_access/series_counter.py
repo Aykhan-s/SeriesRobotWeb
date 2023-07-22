@@ -14,11 +14,13 @@ class SeriesCounter:
         self.new_series_list: List[NewSeries] = []
         self.error_series: List[SeriesModel] = []
 
-    def get_episode_count(self, series: SeriesModel, data_seasons: Dict) -> Union[StatusCodeError, 
-                                                                                APIError,
-                                                                                MaximumUsageError,
-                                                                                Dict]:
-        # sourcery skip: aware-datetime-for-utc
+    def get_episode_count(self, series: SeriesModel, data_seasons: Dict) -> Union[
+            StatusCodeError,
+            APIError,
+            MaximumUsageError,
+            Dict
+        ]:
+
         now_date = datetime.strptime(datetime.strftime(datetime.utcnow(),'%d %b %Y'), '%d %b %Y')
         data_return = {
             'new_episodes_count': 0,
@@ -46,10 +48,15 @@ class SeriesCounter:
                 except ValueError: return data_return
         return data_return
 
-    def find_new_series(self, series: List[SeriesModel]) -> Union[MaximumUsageError, None]:
+    def find_new_series(self, series: List[SeriesModel]) -> Union[
+            MaximumUsageError,
+            InvalidAPIKey,
+            None
+        ]:
         for s in series:
             try:
                 data = get_request(f"https://imdb-api.com/en/API/Title/{self.api_key}/{s.imdb_id}")
+
             except (StatusCodeError, APIError):
                 self.error_series.append(s)
 
@@ -63,10 +70,13 @@ class SeriesCounter:
                 except (StatusCodeError, APIError):
                     self.error_series.append(s)
 
-    def find_last_episode(self, series: SeriesModel) -> Union[MaximumUsageError,
-                                                            StatusCodeError,
-                                                            APIError,
-                                                            NewSeries]:
+    def find_last_episode(self, series: SeriesModel) -> Union[
+            MaximumUsageError,
+            StatusCodeError,
+            InvalidAPIKey,
+            APIError,
+            NewSeries
+        ]:
 
         data = get_request(f"https://imdb-api.com/en/API/Title/{self.api_key}/{series.imdb_id}")
         data = self.get_episode_count(series, data)

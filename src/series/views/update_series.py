@@ -35,12 +35,15 @@ class UpdateSeriesView(LoginRequiredMixin, UpdateView):
 
         try:
             data = get_request(f"https://imdb-api.com/en/API/Title/{series.user.imdb_api_key}/{series.imdb_id}")
+
         except StatusCodeError:
             messages.info(self.request, 'TV Series can not added. Please try again.')
             return redirect('update-series', self.kwargs.get('slug'))
-        except MaximumUsageError as e:
+
+        except (MaximumUsageError, InvalidAPIKey) as e:
             messages.info(self.request, str(e))
             return redirect('update-series', self.kwargs.get('slug'))
+
         except APIError:
             form.add_error('imdb_id', 'ID is not correct.')
             return self.form_invalid(form)
@@ -95,7 +98,7 @@ class UpdateSeriesView(LoginRequiredMixin, UpdateView):
             messages.info(self.request, 'TV Series can not updated. Please try again later.')
             return redirect('update-series', self.kwargs.get('slug'))
 
-        except MaximumUsageError as e:
+        except (MaximumUsageError, InvalidAPIKey) as e:
             messages.info(self.request, str(e))
             return redirect('homepage')
 

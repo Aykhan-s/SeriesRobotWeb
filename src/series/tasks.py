@@ -2,7 +2,10 @@ from celery import shared_task
 from account.models import User
 from django.template.loader import render_to_string
 from imdb_api_access import SeriesCounter
-from imdb_api_access import MaximumUsageError
+from imdb_api_access import (
+    MaximumUsageError,
+    InvalidAPIKey
+)
 from django.core.mail import (EmailMessage,
                             get_connection)
 # from celery.utils.log import get_task_logger
@@ -22,6 +25,7 @@ def compose_email(user):
     try:
         series_counter.find_new_series(series)
         series_len = len(series_counter.new_series_list)
+
     except MaximumUsageError as e:
         if series_len := len(series_counter.new_series_list):
             for updated_series in series_counter.new_series_list:
@@ -35,6 +39,9 @@ def compose_email(user):
                     'maximum_usage': str(e),
                 },
             )
+        return
+
+    except InvalidAPIKey:
         return
 
     if series_len:

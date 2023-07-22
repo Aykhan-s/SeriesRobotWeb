@@ -16,21 +16,26 @@ def profile_editing_view(request):
             if 'imdb_api_key' in form.changed_data:
                 try:
                     get_request(f"https://imdb-api.com/en/API/Title/{request.POST['imdb_api_key']}/tt0110413")
+
                 except StatusCodeError:
                     messages.info(request, 'Account not created. Please try again later')
                     return redirect('profile-editing')
+
                 except MaximumUsageError as e:
                     messages.info(request, str(e))
                     return redirect('profile-editing')
-                except APIError as e:
+
+                except (APIError, InvalidAPIKey) as e:
                     if e.message == 'Invalid API Key':
                         form.add_error('imdb_api_key', 'Invalid API Key')
                         return render(request, 'profile_editing.html', context={"form": form})
+
                     messages.info(request, str(e))
                     return redirect('profile-editing')
 
             if 'email' in form.changed_data:
                 to_email = form.cleaned_data.get('email')
+
                 if to_email is not None:
                     if form.cleaned_data.get('send_email'):
                         form.add_error('send_email', 'You must verify the email before enabling the send email feature')

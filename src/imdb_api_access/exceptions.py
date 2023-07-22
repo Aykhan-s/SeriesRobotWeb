@@ -21,3 +21,10 @@ class MaximumUsageError(Exception):
 
     def __str__(self) -> str:
         return f"IMDB API: {self.message}"
+
+class InvalidAPIKey(Exception):
+    def __init__(self, message: str = 'Upgrade your imdb-api account to use the service'):
+        self.message = message
+
+    def __str__(self) -> str:
+        return f"IMDB API: {self.message}"

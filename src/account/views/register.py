@@ -16,16 +16,20 @@ def register_view(request):  # sourcery skip: extract-method
         if form.is_valid():
             try:
                 get_request(f"https://imdb-api.com/en/API/Title/{request.POST['imdb_api_key']}/tt0110413")
+
             except StatusCodeError:
                 messages.info(request, 'Account not created. Please try again later')
                 return redirect('register')
+
             except MaximumUsageError as e:
                 messages.info(request, str(e))
                 return redirect('register')
-            except APIError as e:
+
+            except (APIError, InvalidAPIKey) as e:
                 if e.message == 'Invalid API Key':
                     form.add_error('imdb_api_key', 'Invalid API Key')
                     return render(request, 'register.html', context={"form": form})
+
                 messages.info(request, str(e))
                 return redirect('register')
 
