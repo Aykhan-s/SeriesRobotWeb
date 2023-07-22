@@ -35,6 +35,7 @@ services:
       - rabbitmq
     volumes:
       - static_volume:/django_static
+      - ../../src:/code/src
 
   celery-worker:
     restart: always
