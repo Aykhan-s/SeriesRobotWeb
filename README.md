@@ -1,4 +1,4 @@
-## ATTENTION: DEPRECATED!
+# ATTENTION: DEPRECATED!
 This project has been deprecated because the `imdb-api.com` service it used to retrieve series data has been discontinued.
 <br /> <br />
 ## This website uses imdb api to send users new episode notifications of their recorded series via e-mail.
